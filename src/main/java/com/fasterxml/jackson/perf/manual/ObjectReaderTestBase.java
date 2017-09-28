@@ -3,6 +3,7 @@ package com.fasterxml.jackson.perf.manual;
 import java.io.*;
 
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.type.SimpleType;
 
 abstract class ObjectReaderTestBase
 {
@@ -54,11 +55,29 @@ abstract class ObjectReaderTestBase
         _desc2 = String.format("%s (%d chars)", desc2, input2.length());
 
         // sanity check:
-        /*T1 back1 =*/ mapper1.readValue(input1, inputClass1);
-        /*T2 back2 =*/ mapper2.readValue(input2, inputClass2);
+        JsonNode back1 = mapper1.readValue(input1, SimpleType.constructUnsafe(JsonNode.class));
+        JsonNode back2 = mapper2.readValue(input2, SimpleType.constructUnsafe(JsonNode.class));
+        System.out.println("input1: " + back1.toString() + " input2: " + back2.toString());
         System.out.println("Input successfully round-tripped for both styles...");
         
         doTest(mapper1, input1, inputClass1, mapper2, input2, inputClass2);
+    }
+
+    /*
+        Mimic a scenario is to enrich the original json string and generate a new json object and then return a json string object.
+     */
+    protected void doTestGenerateJsonString(ObjectMapper mapper, Object originalObject) throws Exception {
+        //long start = System.nanoTime();
+        long startTime = System.currentTimeMillis();
+        final String originalJson = mapper.writeValueAsString(originalObject);
+        int OneMillion = 1000000;
+        for(int i = 0; i < OneMillion; ++i) {
+            JsonNode jsonNode = mapper.readValue(originalJson, SimpleType.constructUnsafe(JsonNode.class));
+            jsonNode.toString();
+        }
+        //System.out.println(_msecsFromNanos(System.nanoTime() - start));
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time taken to process 1000000 recrods "+(endTime - startTime));
     }
     
     protected void doTest(ObjectMapper mapper1, byte[] byteInput1, Class<?> inputClass1,
@@ -214,6 +233,7 @@ abstract class ObjectReaderTestBase
         while (--reps >= 0) {
             result = reader.readValue(input);
         }
+        result.toString();//need to print it or store it.
         hash = result.hashCode();
         return _msecsFromNanos(System.nanoTime() - start);
     }

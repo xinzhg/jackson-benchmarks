@@ -75,21 +75,21 @@ abstract class ObjectWriterTestBase<T1,T2>
                 startMeasure = 0L;
                 System.out.println();
                 System.out.println("Starting measurements...");
-                Thread.sleep(250L);
+//                Thread.sleep(250L);
                 System.out.println();
             }
 
             timesMsec[round] += msecs;
 
-            if ((i % 17) == 0) {
-                System.out.println("[GC]");
-                Thread.sleep(100L);
-                System.gc();
-                Thread.sleep(100L);
-            }
+//            if ((i % 17) == 0) {
+//                System.out.println("[GC]");
+//                Thread.sleep(100L);
+//                System.gc();
+//                Thread.sleep(100L);
+//            }
             
             System.out.printf("Test '%s' [hash: 0x%s] -> %.1f msecs\n", msg, hash, msecs);
-            Thread.sleep(50L);
+//            Thread.sleep(50L);
             if (!lf) {
                 continue;
             }

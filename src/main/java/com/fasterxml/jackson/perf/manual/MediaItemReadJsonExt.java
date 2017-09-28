@@ -4,10 +4,10 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 
-public class MediaItemReadJson extends ManualMediaItemReadBase
+public class MediaItemReadJsonExt extends ManualMediaItemReadBaseExt
 {
-	public MediaItemReadJson(ObjectMapper m, boolean useBytes, String desc) {
-		super(m, useBytes, desc);
+	public MediaItemReadJsonExt(ObjectMapper m) {
+		super(m);
 	}
 
 	public static void main(String[] args) throws Exception
@@ -27,6 +27,6 @@ public class MediaItemReadJson extends ManualMediaItemReadBase
         } else {
         	desc += "(String)";
         }
-        new MediaItemReadJson(m, USE_BYTES, desc).test();
+        new MediaItemReadJsonExt(m).test();
     }
 }
